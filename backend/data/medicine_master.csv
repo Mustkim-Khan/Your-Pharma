@@ -1,0 +1,41 @@
+medicine_id,medicine_name,strength,form,stock_level,prescription_required,category,discontinued,max_quantity_per_order,controlled_substance
+MED001,Metformin,500mg,Tablet,272,False,Diabetes,False,90,False
+MED002,Metformin,850mg,Tablet,200,False,Diabetes,False,90,False
+MED003,Lisinopril,10mg,Tablet,450,True,Cardiovascular,False,30,False
+MED004,Lisinopril,20mg,Tablet,280,True,Cardiovascular,False,30,False
+MED005,Atorvastatin,10mg,Tablet,470,True,Cardiovascular,False,30,False
+MED006,Atorvastatin,20mg,Tablet,316,True,Cardiovascular,False,30,False
+MED007,Amlodipine,5mg,Tablet,400,True,Cardiovascular,False,30,False
+MED008,Amlodipine,10mg,Tablet,180,True,Cardiovascular,False,30,False
+MED009,Omeprazole,20mg,Capsule,600,False,Gastrointestinal,False,60,False
+MED010,Omeprazole,40mg,Capsule,247,False,Gastrointestinal,False,60,False
+MED011,Paracetamol,500mg,Tablet,900,False,Pain Relief,False,100,False
+MED012,Paracetamol,650mg,Tablet,800,False,Pain Relief,False,100,False
+MED013,Ibuprofen,200mg,Tablet,750,False,Pain Relief,False,60,False
+MED014,Ibuprofen,400mg,Tablet,398,False,Pain Relief,False,60,False
+MED015,Amoxicillin,250mg,Capsule,300,True,Antibiotic,False,21,False
+MED016,Amoxicillin,500mg,Capsule,450,True,Antibiotic,False,21,False
+MED017,Azithromycin,250mg,Tablet,200,True,Antibiotic,False,6,False
+MED018,Azithromycin,500mg,Tablet,150,True,Antibiotic,False,6,False
+MED019,Cetirizine,10mg,Tablet,500,False,Allergy,False,30,False
+MED020,Loratadine,10mg,Tablet,400,False,Allergy,False,30,False
+MED021,Salbutamol,100mcg,Inhaler,120,True,Respiratory,False,2,False
+MED022,Montelukast,10mg,Tablet,280,True,Respiratory,False,30,False
+MED023,Pantoprazole,40mg,Tablet,350,False,Gastrointestinal,False,30,False
+MED024,Ranitidine,150mg,Tablet,0,False,Gastrointestinal,True,60,False
+MED025,Losartan,50mg,Tablet,380,True,Cardiovascular,False,30,False
+MED026,Losartan,100mg,Tablet,220,True,Cardiovascular,False,30,False
+MED027,Gabapentin,300mg,Capsule,180,True,Neurological,False,90,False
+MED028,Pregabalin,75mg,Capsule,150,True,Neurological,False,60,True
+MED029,Morphine,10mg,Tablet,50,True,Pain Relief,False,30,True
+MED030,Morphine,30mg,Tablet,30,True,Pain Relief,False,30,True
+MED031,Tramadol,50mg,Capsule,100,True,Pain Relief,False,60,True
+MED032,Diazepam,5mg,Tablet,80,True,Neurological,False,30,True
+MED033,Alprazolam,0.5mg,Tablet,60,True,Neurological,False,30,True
+MED034,Insulin Glargine,100units/ml,Injection,45,True,Diabetes,False,5,False
+MED035,Vitamin D3,1000IU,Tablet,800,False,Supplements,False,90,False
+MED036,Vitamin B12,1500mcg,Tablet,600,False,Supplements,False,90,False
+MED037,Calcium + D3,500mg,Tablet,500,False,Supplements,False,90,False
+MED038,Iron,65mg,Tablet,400,False,Supplements,False,90,False
+MED039,Aspirin,75mg,Tablet,700,False,Cardiovascular,False,90,False
+MED040,Clopidogrel,75mg,Tablet,250,True,Cardiovascular,False,30,False
