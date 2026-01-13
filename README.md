@@ -27,6 +27,73 @@ An advanced, multi-agent AI system designed to revolutionize the pharmacy experi
 *   **Styling**: Tailwind CSS, Lucide Icons
 *   **UI Components**: Custom Dashboard, Chat Interface, Real-time Status Board
 
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    subgraph Frontend [FRONTEND (Next.js)]
+        A[Chat Page]
+        B[Admin Dashboard]
+        C[Refills Page]
+        D[Orders Page]
+    end
+
+    subgraph Backend [BACKEND (FastAPI)]
+        O[ORCHESTRATOR AGENT (GPT-5.2)]
+        
+        subgraph Agents
+            E[Extraction Agent]
+            S[Safety Agent]
+            R[Refill Agent]
+            F[Fulfillment Agent]
+        end
+        
+        subgraph Services
+            DS[Data Service]
+            VS[Voice Service]
+            L[LangSmith Tracing]
+        end
+    end
+
+    Frontend --> |REST API| O
+    O --> E
+    O --> S
+    O --> R
+    O --> F
+```
+
+```ascii
+┌─────────────────────────────────────────────────────────────────┐
+│                        FRONTEND (Next.js)                       │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐         │
+│  │   Chat   │  │  Admin   │  │  Refills │  │  Orders  │         │
+│  │   Page   │  │Dashboard │  │   Page   │  │   Page   │         │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘         │
+└───────┼─────────────┼─────────────┼─────────────┼───────────────┘
+        │             │             │             │
+        └─────────────┴──────┬──────┴─────────────┘
+                             │ REST API
+┌────────────────────────────┼────────────────────────────────────┐
+│                    BACKEND (FastAPI)                            │
+│  ┌─────────────────────────┴─────────────────────────┐          │
+│  │              ORCHESTRATOR AGENT (GPT-5.2)          │         │
+│  │         Coordinates all agents & maintains state   │         │
+│  └──────┬──────────┬──────────┬──────────┬───────────┘          │
+│         │          │          │          │                      │
+│  ┌──────┴───┐ ┌────┴────┐ ┌───┴────┐ ┌───┴──────┐               │
+│  │Extraction│ │ Safety  │ │ Refill │ │Fulfillment│              │
+│  │  Agent   │ │  Agent  │ │ Agent  │ │  Agent   │               │
+│  │gpt-5-mini│ │ gpt-5.2 │ │gpt-5.2 │ │gpt-5-mini│               │
+│  └──────────┘ └─────────┘ └────────┘ └──────────┘               │
+│                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │ Data Service│  │Voice Service│  │  LangSmith  │              │
+│  │  (CSV/Excel)│  │ (STT/TTS)   │  │   Tracing   │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ## 📂 Project Structure
 
 ```
