@@ -210,8 +210,9 @@ async def confirm_order(order_id: str, background_tasks: BackgroundTasks):
     # Trigger webhook in background
     background_tasks.add_task(fulfillment_agent.trigger_warehouse_webhook, order)
     
-    # Progress to preparing
+    # Progress to preparing and then immediately to shipped (for demo visuals)
     fulfillment_agent.update_order_status(order_id, OrderStatus.PREPARING, "Preparing order")
+    fulfillment_agent.update_order_status(order_id, OrderStatus.SHIPPED, "Order dispatched from warehouse")
     
     return {"status": "confirmed", "order_id": order_id}
 
