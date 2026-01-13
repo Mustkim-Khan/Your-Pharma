@@ -402,12 +402,6 @@ export default function OrdersPage() {
                                                                 {event.timestamp && (
                                                                     <p className="text-xs text-gray-400 dark:text-gray-500">{event.timestamp}</p>
                                                                 )}
-                                                                {event.status !== 'pending' && (
-                                                                    <button className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 mt-1">
-                                                                        <ExternalLink className="w-3 h-3" />
-                                                                        View Trace
-                                                                    </button>
-                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>
