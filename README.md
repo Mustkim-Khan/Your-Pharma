@@ -30,38 +30,7 @@ An advanced, multi-agent AI system designed to revolutionize the pharmacy experi
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    subgraph Frontend ["FRONTEND (Next.js)"]
-        A[Chat Page]
-        B[Admin Dashboard]
-        C[Refills Page]
-        D[Orders Page]
-    end
 
-    subgraph Backend ["BACKEND (FastAPI)"]
-        O[ORCHESTRATOR AGENT (GPT-5.2)]
-        
-        subgraph Agents
-            E[Extraction Agent]
-            S[Safety Agent]
-            R[Refill Agent]
-            F[Fulfillment Agent]
-        end
-        
-        subgraph Services
-            DS[Data Service]
-            VS[Voice Service]
-            L[LangSmith Tracing]
-        end
-    end
-
-    Frontend --> |REST API| O
-    O --> E
-    O --> S
-    O --> R
-    O --> F
-```
 
 ```ascii
 ┌─────────────────────────────────────────────────────────────────┐
