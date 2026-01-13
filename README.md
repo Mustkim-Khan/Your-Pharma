@@ -32,14 +32,14 @@ An advanced, multi-agent AI system designed to revolutionize the pharmacy experi
 
 ```mermaid
 graph TD
-    subgraph Frontend [FRONTEND (Next.js)]
+    subgraph Frontend ["FRONTEND (Next.js)"]
         A[Chat Page]
         B[Admin Dashboard]
         C[Refills Page]
         D[Orders Page]
     end
 
-    subgraph Backend [BACKEND (FastAPI)]
+    subgraph Backend ["BACKEND (FastAPI)"]
         O[ORCHESTRATOR AGENT (GPT-5.2)]
         
         subgraph Agents
