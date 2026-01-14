@@ -1,6 +1,6 @@
 """
 Inventory & Fulfillment Agent
-Model: gpt-4o-mini
+Model: gpt-5-mini
 Purpose: Execute orders, update inventory, trigger warehouse webhooks, send notifications, generate receipts
 """
 import uuid
