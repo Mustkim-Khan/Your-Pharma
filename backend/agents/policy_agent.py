@@ -50,7 +50,7 @@ DECISION LOGIC:
   - Decision: APPROVED
   - Reason: "Safety checks passed."
   - Evidence: ["Prescription: <ID/None>", "Quantity: Safe"]
-  - Next Agent: FulfillmentAgent
+  - Next Agent: None
 
 System Context provides the medicine details and patient details.
 """
