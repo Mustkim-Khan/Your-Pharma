@@ -397,6 +397,7 @@ class FulfillmentAgent:
 YOUR RESPONSIBILITIES:
 1. Confirm order is ready for dispatch.
 2. Trigger warehouse webhook (mock decision).
+3. Be precise and concise in your reasoning.
 
 DECISION LOGIC:
 - If ready:

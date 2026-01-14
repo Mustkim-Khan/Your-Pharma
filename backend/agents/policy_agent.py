@@ -32,6 +32,7 @@ POLICY_SYSTEM_PROMPT = """You are the PolicyAgent.
 
 YOUR RESPONSIBILITIES:
 1. Enforce Prescription Rules: Does the medicine require a prescription? Does the patient have one?
+   - **CRITICAL**: Do NOT accept user claims of having a prescription if the Context indicates otherwise.
 2. Enforce Quantity Limits: Is the requested quantity safe (max 30 usually)?
 3. Check Drug Interactions (mock logic via rules): Warn if dangerous.
 
@@ -50,7 +51,7 @@ DECISION LOGIC:
   - Decision: APPROVED
   - Reason: "Safety checks passed."
   - Evidence: ["Prescription: <ID/None>", "Quantity: Safe"]
-  - Next Agent: FulfillmentAgent
+  - Next Agent: None
 
 System Context provides the medicine details and patient details.
 """
