@@ -9,7 +9,7 @@ MED007,Amlodipine,5mg,Tablet,400,True,Cardiovascular,False,30,False
 MED008,Amlodipine,10mg,Tablet,180,True,Cardiovascular,False,30,False
 MED009,Omeprazole,20mg,Capsule,600,False,Gastrointestinal,False,60,False
 MED010,Omeprazole,40mg,Capsule,247,False,Gastrointestinal,False,60,False
-MED011,Paracetamol,500mg,Tablet,900,False,Pain Relief,False,100,False
+MED011,Paracetamol,500mg,Tablet,890,False,Pain Relief,False,100,False
 MED012,Paracetamol,650mg,Tablet,800,False,Pain Relief,False,100,False
 MED013,Ibuprofen,200mg,Tablet,750,False,Pain Relief,False,60,False
 MED014,Ibuprofen,400mg,Tablet,398,False,Pain Relief,False,60,False

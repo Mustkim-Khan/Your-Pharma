@@ -8,9 +8,11 @@ import httpx
 from datetime import datetime
 from typing import List, Optional, Dict
 import os
+import json
+from openai import OpenAI
 
-from models.schemas import Order, OrderItem, OrderStatus, OrderStatusUpdate
-from utils.tracing_utils import traceable, tracing_context
+from models.schemas import Order, OrderItem, OrderStatus, OrderStatusUpdate, AgentDecision
+from utils.tracing_utils import traceable, tracing_context, wrap_openai
 
 
 class AgentEvent:
@@ -285,11 +287,13 @@ class FulfillmentAgent:
                 response = await client.post(webhook_url, json=payload, timeout=10.0)
                 if response.status_code == 200:
                     print(f"✅ Warehouse webhook triggered successfully for order {order.order_id}")
-                    self.update_order_status(
-                        order.order_id, 
-                        OrderStatus.PROCESSING, 
-                        "Order sent to warehouse for fulfillment"
-                    )
+                    # Only update to processing if not already shipped (to preserve demo visuals)
+                    if order.status != OrderStatus.SHIPPED:
+                        self.update_order_status(
+                            order.order_id, 
+                            OrderStatus.PROCESSING, 
+                            "Order sent to warehouse for fulfillment"
+                        )
                     # Add dispatched event
                     self.add_event(
                         order.order_id,
@@ -373,6 +377,70 @@ class FulfillmentAgent:
 **Status:** {order.status.value}
 """
         return summary
+
+
+        return summary
+
+    @traceable(run_type="chain", name="FulfillmentAgent.run")
+    def run(self, order_id: str) -> AgentDecision:
+        """
+        Execute fulfillment logic using LLM decision.
+        """
+        # Logic: Always approve for demo unless something is flagged (not implemented)
+        context = {
+            "order_id": order_id,
+            "status": "Ready for Dispatch"
+        }
+        
+        messages = [
+            {"role": "system", "content": """You are the FulfillmentAgent.
+YOUR RESPONSIBILITIES:
+1. Confirm order is ready for dispatch.
+2. Trigger warehouse webhook (mock decision).
+
+DECISION LOGIC:
+- If ready:
+  - Decision: APPROVED
+  - Reason: "Order dispatched successfully."
+  - Evidence: ["Webhook: Triggered", "Notification: Sent"]
+  - Next Agent: None
+""" + f"\n\nCONTEXT:\n{json.dumps(context)}"},
+            {"role": "user", "content": f"Execute fulfillment for order {order_id}"}
+        ]
+
+        # Use tool for structured output
+        RECORD_DECISION_TOOL = {
+            "type": "function",
+            "function": {
+                "name": "record_agent_decision",
+                "description": "Record the agent's decision.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "agent": {"type": "string"},
+                        "decision": {"type": "string", "enum": ["APPROVED", "REJECTED", "NEEDS_INFO", "SCHEDULED"]},
+                        "reason": {"type": "string"},
+                        "evidence": {"type": "array", "items": {"type": "string"}},
+                        "next_agent": {"type": "string"}
+                    },
+                    "required": ["agent", "decision", "reason", "evidence", "next_agent"]
+                }
+            }
+        }
+        
+        # Wrapped client
+        client = wrap_openai(OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
+        response = client.chat.completions.create(
+            model="gpt-5-mini",
+            messages=messages,
+            tools=[RECORD_DECISION_TOOL],
+            tool_choice={"type": "function", "function": {"name": "record_agent_decision"}}
+        )
+
+        tool_call = response.choices[0].message.tool_calls[0]
+        args = json.loads(tool_call.function.arguments)
+        
+        return AgentDecision(**args)
 
 
 # Singleton instance

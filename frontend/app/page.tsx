@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Send, Mic, MicOff, Loader2, Paperclip, CheckCircle, ExternalLink, Settings, ChevronRight, Clock, ChevronDown, User, Volume2, Pill, Upload, AlertCircle, X } from 'lucide-react';
+import { Send, Mic, MicOff, Loader2, Paperclip, CheckCircle, ExternalLink, Settings, ChevronRight, Clock, ChevronDown, User, Volume2, Pill, Upload, AlertCircle, X, Truck } from 'lucide-react';
 import PrescriptionUploadCard from '@/components/PrescriptionUploadCard';
 
 interface Patient {
@@ -515,8 +515,9 @@ export default function ChatPage() {
                                 {message.orderPreview && (() => {
                                     const subtotal = message.orderPreview.total_amount || 0;
                                     const tax = subtotal * 0.05;
-                                    const delivery = 2.00;
-                                    const total = subtotal + tax + delivery;
+                                    const total = subtotal + tax;
+                                    const totalQuantity = message.orderPreview.items?.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0) || 1;
+                                    const pricePerUnit = totalQuantity > 0 ? subtotal / totalQuantity : 0;
                                     const requiresPrescription = message.orderPreview.requires_prescription ||
                                         message.orderPreview.items?.some((item: any) => item.prescription_required);
                                     const prescriptionMedicines = message.orderPreview.items?.filter((item: any) => item.prescription_required).map((item: any) => item.medicine_name) || [];
@@ -536,8 +537,8 @@ export default function ChatPage() {
                                                 />
                                             )}
 
-                                            {/* Order Card */}
-                                            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-300">
+                                            {/* Order Card with Left Accent Border */}
+                                            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-l-4 border-l-indigo-600 border border-gray-200 dark:border-gray-700 p-4 transition-colors duration-300">
                                                 <div className="mb-3">
                                                     <h4 className="font-semibold text-gray-900 dark:text-white">
                                                         {requiresPrescription ? 'Order Summary' : 'Confirm Your Order'}
@@ -545,47 +546,65 @@ export default function ChatPage() {
                                                     <p className="text-xs text-gray-500 dark:text-gray-400">Review details before confirming home delivery</p>
                                                 </div>
 
-                                                <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">Medicine</p>
+                                                <p className="text-xs text-gray-400 uppercase tracking-wider mb-2 font-medium">Medicine Details</p>
 
-                                                {message.orderPreview.items?.map((item: any, idx: number) => (
-                                                    <div key={idx} className="flex items-start gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg mb-2">
-                                                        <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
-                                                            <Pill className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="font-medium text-gray-900 dark:text-gray-200 text-sm">{item.medicine_name} {item.strength}</p>
-                                                                {item.prescription_required && (
-                                                                    <span className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 text-[10px] font-medium rounded">Rx</span>
-                                                                )}
+                                                {message.orderPreview.items?.map((item: any, idx: number) => {
+                                                    const itemTotal = item.unit_price ? item.unit_price * item.quantity : 0;
+                                                    const supplyDays = item.supply_days || Math.round((item.quantity || 2) * 0.5) || 45;
+
+                                                    return (
+                                                        <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg mb-2">
+                                                            <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
+                                                                <Pill className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                                             </div>
-                                                            <p className="text-xs text-gray-500 dark:text-gray-400">Quantity: {item.quantity} tablets</p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">{item.medicine_name}</p>
+                                                                    {item.unit_price && (
+                                                                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                                                            ${itemTotal.toFixed(2)}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                                    {item.strength} • {item.quantity} units
+                                                                </p>
+                                                                <p className="text-xs text-cyan-600 dark:text-cyan-400 mt-1">
+                                                                    Supply: ~{supplyDays} days
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                        {item.unit_price && (
-                                                            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                                ${(item.unit_price * item.quantity).toFixed(2)}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                    );
+                                                })}
 
                                                 {/* Price Breakdown */}
-                                                <div className="border-t border-gray-100 dark:border-gray-700 pt-3 mt-3 space-y-1 text-xs">
-                                                    <div className="flex justify-between text-gray-500 dark:text-gray-400">
-                                                        <span>Subtotal</span>
-                                                        <span>${subtotal.toFixed(2)}</span>
+                                                <div className="border-t border-gray-100 dark:border-gray-600 pt-3 mt-3">
+                                                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-2">
+                                                        <span>Price per unit</span>
+                                                        <span>${pricePerUnit.toFixed(2)}/unit</span>
                                                     </div>
-                                                    <div className="flex justify-between text-gray-500 dark:text-gray-400">
-                                                        <span>Tax (5%)</span>
-                                                        <span>${tax.toFixed(2)}</span>
+                                                    <div className="flex justify-between items-baseline">
+                                                        <div>
+                                                            <p className="font-semibold text-gray-900 dark:text-white text-sm">Total Amount</p>
+                                                            <p className="text-[10px] text-gray-400 dark:text-gray-500">Inclusive of all taxes</p>
+                                                        </div>
+                                                        <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                                                            ${total.toFixed(2)}
+                                                        </span>
                                                     </div>
-                                                    <div className="flex justify-between text-gray-500 dark:text-gray-400">
-                                                        <span>Delivery</span>
-                                                        <span>${delivery.toFixed(2)}</span>
+                                                </div>
+
+                                                {/* Home Delivery Section */}
+                                                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/40 rounded-lg flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
+                                                        <Truck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                                     </div>
-                                                    <div className="flex justify-between font-semibold text-gray-900 dark:text-white text-sm pt-1">
-                                                        <span>Total</span>
-                                                        <span>${total.toFixed(2)}</span>
+                                                    <div>
+                                                        <p className="font-medium text-gray-900 dark:text-white text-sm">Home Delivery</p>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                                            <Clock className="w-3 h-3" />
+                                                            Est. Tomorrow by 9:00 PM
+                                                        </p>
                                                     </div>
                                                 </div>
 
@@ -593,16 +612,16 @@ export default function ChatPage() {
                                                 {!requiresPrescription && (
                                                     <div className="flex gap-2 mt-4">
                                                         <button
-                                                            onClick={() => sendMessage('confirm')}
-                                                            className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
-                                                        >
-                                                            Confirm Order
-                                                        </button>
-                                                        <button
                                                             onClick={() => sendMessage('cancel')}
-                                                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
+                                                            className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-lg transition-colors"
                                                         >
                                                             Cancel
+                                                        </button>
+                                                        <button
+                                                            onClick={() => sendMessage('confirm')}
+                                                            className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                                        >
+                                                            Confirm Order
                                                         </button>
                                                     </div>
                                                 )}

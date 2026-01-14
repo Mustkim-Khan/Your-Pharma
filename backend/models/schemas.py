@@ -198,3 +198,13 @@ class VoiceResponse(BaseModel):
     transcript: str
     chat_response: ChatResponse
     audio_response_base64: Optional[str] = None
+
+
+# Structured Decision Schema
+class AgentDecision(BaseModel):
+    agent: str
+    decision: Literal["APPROVED", "REJECTED", "NEEDS_INFO", "SCHEDULED"]
+    reason: str
+    message: Optional[str] = None
+    evidence: List[str]
+    next_agent: Optional[str] = None
