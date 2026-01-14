@@ -1,6 +1,6 @@
 """
 Inventory Agent
-Model: gpt-4o-mini
+Model: gpt-5-mini
 Purpose: Checks medicine availability and stock levels.
 """
 import json
