@@ -1,6 +1,6 @@
 """
 Pharmacist Agent
-Model: gpt-4o
+Model: gpt-5.2
 Purpose: Interprets user intent, extracts order details, and routes to appropriate downstream agent.
 """
 import json
